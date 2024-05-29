@@ -27,7 +27,7 @@ public class MyFirstJuniorRobot extends JuniorRobot {
 	 */
 	public void run() {
 		// Set robot colors
-		setColors(green, black, blue);
+		setColors(orange, blue, blue);
 
 		// Seesaw forever
 		while (true) {
