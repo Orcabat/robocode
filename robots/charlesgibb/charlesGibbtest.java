@@ -28,7 +28,7 @@ public class charlesGibbtest extends Robot{
 			// If we've haven't seen our target for 2 turns, look left
 			if (count > 2) {
 				i = -30;
-			}
+			}//this code is slightly modified from the original trackfire code, because I want it to spread out looking further. Also for some reason the original variables broke so I ended up needing to redo things. Also, since we're not trying to target one specific person, I can take out the identification system. 
 			// If we still haven't seen our target for 5 turns, look right
 			if (count > 5) {
 				i = 30;
@@ -37,15 +37,26 @@ public class charlesGibbtest extends Robot{
     
     public void onScannedRobot(ScannedRobotEvent e) {
        // This part is taken from Tracker just cause it's so frigging good.
+       //absoluteBearing is just the heading that we're at and the heading that the enemy is at. 
 		double absoluteBearing = getHeading() + e.getBearing();
+        //normalRelativeAngleDegrees finds the angle that it's at and puts it on a scale from 0-1 (based on 0-360) and then it takes abosoluteBearing and subtracts where our gun is to normalize that angle here. 
 		double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());
 
 		// If it's close enough, fire!
+        //absolute value of the bearing that we have, if it's less than or equal to three then we turn gun right by that bearing, and the rest just checks heat. 
 		if (Math.abs(bearingFromGun) <= 3) {
 			turnGunRight(bearingFromGun);
 			if (getGunHeat() == 0) {
-				fire(Math.min(3 - Math.abs(bearingFromGun), getEnergy() - .1));
+				fire(3);
 			}
+            //for this I kinda just looked up how gunheat works and I literally just don't understand a single thing of it so yeah
+            else if(getGunHeat()>0 && getGunHeat()<5){
+                fire(2);
+            }
+            else{
+                fire(1);
+            }
+            
 		} // otherwise just set the gun to turn.
 		// Note:  This will have no effect until we call scan()
 		else {
@@ -56,20 +67,22 @@ public class charlesGibbtest extends Robot{
     
     
     public void onHitByBullet(HitByBulletEvent e) {
-       
-        turnGunRight(90);
+       turnLeft(90);
+       ahead(50);
+        
     }
     
     public void onHitWall() {
-        // Avoid the wall by moving away from it
-        back(70);
-        turnRight(50);
+       turnLeft(100);
+       ahead(50);
     }
-    
+    //also wow getting a zero for not being able to explain your code is kinda crazy lol
     // Method to turn the gun towards the last scanned enemy
     public void turnGunToEnemy(ScannedRobotEvent e) {
         double gunTurn = getHeading() + e.getBearing() - getGunHeading();
+        //Basically, how this works is it finds our position, adds the enemy's position to that, then subtracts where the gun is to trangulate where the gun should be pointed...
         turnGunRight(normalizeBearing(gunTurn));
+        //here is where it's implemented. 
     }
     
     // Method to fire at the enemy with increased power as it gets closer
