@@ -59,6 +59,7 @@ public class charlesGibbtest extends Robot{
             
 		} // otherwise just set the gun to turn.
 		// Note:  This will have no effect until we call scan()
+        //dude, advancedrobot is just so frigging broken, whenever I go against any of them it's like they're playing a frigging hitman speedrun while I'm struggling on checkers. It's just straight up unfair. 
 		else {
 			turnGunRight(bearingFromGun);
 	}}
@@ -69,11 +70,12 @@ public class charlesGibbtest extends Robot{
     public void onHitByBullet(HitByBulletEvent e) {
        turnLeft(90);
        ahead(50);
-        
+    //obviously just turning again and stuff
     }
     
     public void onHitWall() {
-       turnLeft(100);
+        //I want them to turn slightly further than 100 so that they can strafe a bit better. 
+       turnLeft(200);
        ahead(50);
     }
     //also wow getting a zero for not being able to explain your code is kinda crazy lol
@@ -84,18 +86,9 @@ public class charlesGibbtest extends Robot{
         turnGunRight(normalizeBearing(gunTurn));
         //here is where it's implemented. 
     }
-    
-    // Method to fire at the enemy with increased power as it gets closer
-    public void fireAtEnemy(double distance) {
-        // Calculate fire power based on distance
-        double firePower = Math.min(3, 400 / distance);
-    
-        // Fire at the enemy
-        fire(firePower);
-    }
-    
-    // Method to normalize the bearing between -180 and 180 degrees
+    //originally there was a method here to determine firepower but I don't actually wanna use it cause the math isn't actually my math. 
     public double normalizeBearing(double angle) {
+        //again, just normalization again, it's a while loop that subtracts 360 to make the number smol. 
         while (angle > 180) angle -= 360;
         while (angle < -180) angle += 360;
         return angle;
